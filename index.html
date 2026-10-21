@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>나를 살리는 코디 랩</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff6f1;--ink:#2d2733;--muted:#766c7d;--pink:#ff6b8b;--pink2:#ffe4ea;--violet:#7b61ff;--violet2:#ece8ff;--green:#1fa36a;--green2:#dff6ea;--line:#eadfe6;--card:#fff;--shadow:0 10px 30px rgba(120,80,110,.12)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff1f4 0%,#fff9ef 55%,#eef6ff 100%);min-height:100vh;line-height:1.6;font-size:16px}
+button{font-family:inherit;color:inherit}
+h1,h2,h3{font-family:'Jua','Noto Sans KR',sans-serif;font-weight:400;margin:0}
+h4{margin:0 0 8px;font-size:15px}
+p{margin:0}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 18px}
+.brand{font-family:'Jua',sans-serif;font-size:22px;color:var(--pink);background:none;border:0;cursor:pointer;padding:4px 6px}
+#steps{display:flex;gap:6px;overflow-x:auto;padding:2px}
+.step{white-space:nowrap;border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer;min-height:36px}
+.step.on{background:var(--pink);border-color:var(--pink);color:#fff;font-weight:700}
+.step.done{border-color:var(--pink);color:var(--pink)}
+main{max-width:1120px;margin:0 auto;padding:6px 16px 60px}
+.screen[hidden]{display:none}
+.card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:20px}
+.stage{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:20px;align-items:start}
+.col{display:flex;flex-direction:column;gap:18px;min-width:0}
+.avcard{background:linear-gradient(180deg,#fff 0%,#fff0f4 100%);text-align:center;padding:14px}
+.fit{height:min(70vh,600px);display:flex;justify-content:center}
+.fit.sm{height:min(52vh,430px)}
+.fit svg{height:100%;width:auto;aspect-ratio:300/580;max-width:100%}
+.cap{font-size:13px;color:var(--muted);margin-top:6px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{border:0;background:var(--violet2);border-radius:14px;padding:10px 16px;font-size:15px;cursor:pointer;min-height:44px;font-weight:500}
+.tab.on{background:var(--violet);color:#fff;font-weight:700}
+.grp{margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:8px 16px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:15px;cursor:pointer;transition:.12s}
+.chip:hover:not(:disabled){border-color:var(--pink)}
+.chip.on{border-color:var(--pink);background:var(--pink2);font-weight:700;box-shadow:0 0 0 3px rgba(255,107,139,.22)}
+.chip:disabled{opacity:.45;cursor:not-allowed}
+.sw{width:42px;height:42px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #d5cbd8;cursor:pointer;position:relative;padding:0}
+.sw.on{box-shadow:0 0 0 3px var(--pink),0 0 0 6px rgba(255,107,139,.25)}
+.sw.star::after{content:"★";position:absolute;right:-5px;top:-9px;font-size:15px;color:#f5a623;text-shadow:0 0 2px #fff}
+.sw-cap{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px;max-width:320px}
+.note{background:#fff8dd;border-radius:16px;padding:12px 16px;font-size:15px}
+.note.pink{background:var(--pink2)}
+.note.green{background:var(--green2)}
+.btn{min-height:50px;padding:10px 26px;border-radius:999px;border:0;background:var(--pink);color:#fff;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(255,107,139,.35)}
+.btn:hover{filter:brightness(1.05)}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.btn.violet{background:var(--violet);box-shadow:0 6px 16px rgba(123,97,255,.3)}
+.btn.sm{min-height:42px;font-size:15px;padding:8px 18px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:22px;flex-wrap:wrap}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center}
+.hero h1{font-size:clamp(34px,6vw,58px);line-height:1.15;color:var(--pink)}
+.hero .msg{font-size:clamp(18px,2.6vw,24px);font-weight:700;margin:16px 0;background:linear-gradient(transparent 55%,#ffd9e2 55%);display:inline}
+.steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
+.s4{background:#fff;border-radius:20px;padding:14px;box-shadow:var(--shadow)}
+.s4 b{display:block;color:var(--violet);font-family:'Jua',sans-serif;font-size:20px}
+.s4 span{font-size:14px;color:var(--muted)}
+.heroav{background:#fff;border-radius:30px;padding:10px;box-shadow:var(--shadow)}
+.goals{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.goal{text-align:left;padding:16px;border-radius:20px;border:2px solid var(--line);background:#fff;cursor:pointer;min-height:92px;font-size:16px}
+.goal.on{border-color:var(--violet);background:var(--violet2);box-shadow:0 0 0 3px rgba(123,97,255,.25)}
+.goal b{display:block;font-size:17px}
+.goal small{color:var(--muted);font-size:13px;line-height:1.4;display:block;margin-top:4px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:10px}
+.cs{border:2px solid var(--line);background:#fff;border-radius:16px;padding:8px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;position:relative;min-height:74px}
+.cs i{width:36px;height:36px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.cs.on{border-color:var(--pink);background:var(--pink2);font-weight:700}
+.cs.onb{border-color:var(--violet);background:var(--violet2);font-weight:700}
+.cs em{position:absolute;top:-8px;right:-4px;font-style:normal;background:var(--pink);color:#fff;border-radius:999px;font-size:10px;padding:0 6px}
+.cs em.b{background:var(--violet)}
+.dfit{background:linear-gradient(180deg,#fff,#fdeef3);border-radius:22px;padding:6px;text-align:center}
+.dfit svg{width:100%;height:auto;max-height:360px}
+.drow{display:grid;gap:12px}
+.drow.two{grid-template-columns:1fr 1fr}
+.imp{font-family:'Jua',sans-serif;font-size:20px;color:var(--violet);text-align:center;margin:8px 0 0}
+.mrow{margin-bottom:12px;padding:8px 10px;border-radius:14px;border:2px solid transparent}
+.mrow.tg{border-color:var(--violet);border-style:dashed;background:#faf9ff}
+.mrow.ok{border-color:var(--green);background:var(--green2)}
+.mtop{display:flex;justify-content:space-between;font-size:15px}
+.mtop b{font-variant-numeric:tabular-nums}
+.bar{position:relative;height:16px;background:#f1e9ee;border-radius:99px;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--pink);border-radius:99px;transition:width .35s}
+.mrow.tg .bar i{background:var(--violet)}
+.mrow.ok .bar i{background:var(--green)}
+.bar u{position:absolute;top:0;bottom:0;width:2px;background:rgba(0,0,0,.28)}
+.mnote{font-size:13px;margin-top:3px;color:var(--muted)}
+.mrow.ok .mnote{color:#157a50;font-weight:700}
+.effects ol{margin:6px 0 0;padding-left:22px}
+.effects li{margin-bottom:4px}
+.row2{display:flex;gap:10px;flex-wrap:wrap}
+textarea,input[type=text]{width:100%;font:inherit;padding:12px 14px;border-radius:16px;border:2px solid var(--line);background:#fff;resize:vertical}
+textarea:focus,input[type=text]:focus{outline:3px solid rgba(123,97,255,.3);border-color:var(--violet)}
+.check{list-style:none;padding:0;margin:8px 0 0}
+.check li{display:flex;gap:8px;align-items:flex-start;padding:6px 0}
+.check .mk{width:26px;height:26px;border-radius:50%;background:#eee;display:inline-flex;align-items:center;justify-content:center;flex:none;font-weight:700;color:#fff}
+.check li.ok .mk{background:var(--green)}
+.codi-card{background:linear-gradient(160deg,#fff 0%,#fff2f6 100%);border:3px solid var(--pink2);border-radius:28px;padding:20px}
+.cc-head small{color:var(--pink);font-weight:700}
+.cc-head h3{font-size:34px}
+.cc-body{display:grid;grid-template-columns:minmax(120px,.8fr) 1.2fr;gap:14px;margin-top:10px;align-items:start}
+.cc-body .fit{height:min(54vh,430px)}
+.pill{display:inline-block;background:var(--violet2);color:var(--violet);border-radius:999px;padding:4px 12px;margin:0 6px 6px 0;font-size:14px;font-weight:700}
+.mini{display:grid;grid-template-columns:96px 1fr 34px;gap:6px;align-items:center;font-size:12px;margin-bottom:5px}
+.mini .bar{height:10px;margin:0}
+.mini.ok .bar i{background:var(--green)}
+.mini.tg .bar i{background:var(--violet)}
+.cc-desc{margin-top:12px;background:#fff;border-radius:18px;padding:14px;white-space:pre-wrap;word-break:keep-all}
+.cmpgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cmprow{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin-bottom:10px;font-size:14px}
+.cmprow .bar{height:11px;margin:2px 0}
+.cmprow .bar.b i{background:var(--violet)}
+.legend{display:flex;gap:12px;font-size:13px;flex-wrap:wrap;color:var(--muted);margin-bottom:6px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:4px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:#2d2733;color:#fff;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90vw;text-align:center;font-size:15px}
+#toast.show{opacity:1;transform:translateX(-50%)}
+@media(max-width:860px){
+ .stage{grid-template-columns:1fr}
+ .avcard{position:sticky;top:6px;z-index:10;padding:8px}
+ .avcard .fit{height:36vh}
+ .avcard .cap{display:none}
+ .hero{grid-template-columns:1fr}
+ .steps4{grid-template-columns:1fr 1fr}
+ .cmpgrid .fit.sm{height:34vh}
+ .cmprow{grid-template-columns:1fr}
+ .cc-body{grid-template-columns:1fr 1.3fr}
+}
+@media(max-width:520px){.steps4{grid-template-columns:1fr}.card{padding:14px;border-radius:22px}.cc-body{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><button class="brand" data-act="go" data-v="start">나를 살리는 코디 랩</button><nav id="steps" aria-label="진행 단계"></nav></header>
+<main>
+ <section id="s-start" class="screen"></section>
+ <section id="s-avatar" class="screen" hidden></section>
+ <section id="s-drape" class="screen" hidden></section>
+ <section id="s-goal" class="screen" hidden></section>
+ <section id="s-coordi" class="screen" hidden></section>
+ <section id="s-compare" class="screen" hidden></section>
+ <section id="s-card" class="screen" hidden></section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript>이 도구는 JavaScript가 필요해요.</noscript>
+
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ================= 데이터 ================= */
+const FACES=[{id:'round',name:'둥근형'},{id:'slim',name:'갸름한형'},{id:'square',name:'각진형'},{id:'long',name:'긴형'},{id:'heart',name:'하트형'}];
+const FACE_D={
+ round:'M110,90 C110,62 128,50 150,50 C172,50 190,62 190,90 C190,118 172,136 150,136 C128,136 110,118 110,90Z',
+ slim:'M114,88 C114,62 130,50 150,50 C170,50 186,62 186,88 C186,112 170,138 150,142 C130,138 114,112 114,88Z',
+ square:'M108,84 C108,60 126,50 150,50 C174,50 192,60 192,84 L192,112 Q192,136 170,136 L130,136 Q108,136 108,112Z',
+ long:'M114,90 C114,60 130,44 150,44 C170,44 186,60 186,90 L186,112 C186,134 170,146 150,146 C130,146 114,134 114,112Z',
+ heart:'M108,80 C108,58 128,50 150,50 C172,50 192,58 192,80 C192,108 172,130 150,144 C128,130 108,108 108,80Z'
+};
+const SKIN={
+ yellow:['#FCE6CF','#F6D3A9','#EBBC87','#D49A63','#A9703F','#6F4526'],
+ red:['#FCE2DC','#F7CFC4','#EDB4A2','#D68F78','#A8644F','#6B3C32']
+};
+const SKIN_NAMES=['1단계 (가장 밝은 톤)','2단계','3단계','4단계','5단계','6단계 (가장 어두운 톤)'];
+const HAIRS=[{id:0,name:'짧은 머리'},{id:1,name:'단발'},{id:2,name:'긴 머리'},{id:3,name:'묶은 머리'}];
+const HAIR_COLORS=[{name:'검정',hex:'#2a2325'},{name:'짙은 갈색',hex:'#5a3a26'},{name:'밝은 갈색',hex:'#9a6a3c'},{name:'회갈색',hex:'#8a8379'}];
+const HEIGHTS={short:'작은 편',mid:'보통',tall:'큰 편'};
+const SHOULDERS={narrow:'좁은 편',mid:'보통',wide:'넓은 편'};
+const BODIES={straight:'일자형',upper:'상체 볼륨형',lower:'하체 볼륨형',curvy:'곡선형'};
+
+const TOPS=[
+ {id:'shirt',name:'셔츠',neck:false},{id:'hoodie',name:'후드티',neck:false},{id:'wind',name:'바람막이',neck:false},
+ {id:'hstripe',name:'가로 줄무늬 티셔츠',neck:true},{id:'vstripe',name:'세로 줄무늬 티셔츠',neck:true},
+ {id:'plain',name:'무지 티셔츠',neck:true},{id:'knit',name:'니트',neck:true},
+ {id:'sweat',name:'오버핏 맨투맨',neck:true},{id:'crop',name:'크롭 상의',neck:true}
+];
+const BOTTOMS=[
+ {id:'flare',name:'나팔바지'},{id:'skinny',name:'스키니바지'},{id:'straight',name:'일자 청바지'},{id:'wide',name:'와이드팬츠'},
+ {id:'jogger',name:'추리닝 바지'},{id:'shorts',name:'반바지'},{id:'aline',name:'A라인 치마'},{id:'hline',name:'H라인 치마'}
+];
+const OUTERS=[{id:'none',name:'없음'},{id:'jacket',name:'재킷'},{id:'cardigan',name:'가디건'},{id:'coat',name:'롱코트'}];
+const SHOES=[{id:'sneakers',name:'운동화'},{id:'loafers',name:'로퍼'},{id:'sandals',name:'샌들'},{id:'boots',name:'부츠'}];
+const NECKS=[{id:'round',name:'라운드넥'},{id:'v',name:'V넥'},{id:'turtle',name:'터틀넥'}];
+const NAME_OF=(arr,id)=>(arr.find(x=>x.id===id)||{name:id}).name;
+const LONGPANTS=['flare','skinny','straight','wide','jogger'];
+
+const DRAPE_COLORS=[
+ {id:'coral',n:'코랄',h:'#FF7F6E',g:'w',t:'생기 있고 따뜻한 인상'},
+ {id:'apricot',n:'살구',h:'#FFB27A',g:'w',t:'부드럽고 포근한 인상'},
+ {id:'orange',n:'오렌지',h:'#F28A2E',g:'w',t:'활기차고 밝은 인상'},
+ {id:'mustard',n:'머스타드',h:'#E0A800',g:'w',t:'따뜻하고 개성 있는 인상'},
+ {id:'red',n:'레드',h:'#D93A3A',g:'w',t:'선명하고 당당한 인상'},
+ {id:'camel',n:'카멜',h:'#C48A4F',g:'w',t:'차분하고 안정적인 인상'},
+ {id:'olive',n:'올리브',h:'#8A8A3A',g:'w',t:'자연스럽고 편안한 인상'},
+ {id:'brown',n:'브라운',h:'#8B5A3C',g:'w',t:'깊이 있고 아늑한 인상'},
+ {id:'lavender',n:'라벤더',h:'#B9A7E8',g:'c',t:'부드럽고 맑은 인상'},
+ {id:'rose',n:'로즈핑크',h:'#E27FA8',g:'c',t:'화사하고 사랑스러운 인상'},
+ {id:'sky',n:'스카이블루',h:'#7FB8E8',g:'c',t:'시원하고 청량한 인상'},
+ {id:'royal',n:'로열블루',h:'#2F5DC8',g:'c',t:'또렷하고 믿음직한 인상'},
+ {id:'mint',n:'민트',h:'#86D9C3',g:'c',t:'산뜻하고 상쾌한 인상'},
+ {id:'emerald',n:'에메랄드',h:'#1E9E7E',g:'c',t:'선명하고 세련된 인상'},
+ {id:'purple',n:'퍼플',h:'#7B4BB5',g:'c',t:'신비롭고 우아한 인상'},
+ {id:'navy',n:'네이비',h:'#1F2E5C',g:'c',t:'단정하고 차분한 인상'},
+ {id:'white',n:'흰색',h:'#FFFFFF',g:'n',t:'깨끗하고 환한 인상'},
+ {id:'lgray',n:'연회색',h:'#C9CBD1',g:'n',t:'은은하고 차분한 인상'},
+ {id:'dgray',n:'진회색',h:'#4A4D55',g:'n',t:'안정적이고 도시적인 인상'},
+ {id:'black',n:'검정',h:'#1E1E22',g:'n',t:'또렷하고 단정한 인상'}
+];
+const DC=id=>DRAPE_COLORS.find(c=>c.id===id);
+const BASIC=[
+ {n:'흰색',h:'#FFFFFF'},{n:'아이보리',h:'#F3EAD3'},{n:'연회색',h:'#C9CBD1'},{n:'진회색',h:'#4A4D55'},{n:'검정',h:'#1E1E22'},
+ {n:'네이비',h:'#1F2E5C'},{n:'데님블루',h:'#4D6FA3'},{n:'스카이블루',h:'#9CC7EE'},{n:'카키',h:'#7D8B5A'},{n:'베이지',h:'#D9C3A0'},
+ {n:'카멜',h:'#B77B45'},{n:'코랄',h:'#FF7F6E'},{n:'레드',h:'#D13B3B'},{n:'라벤더',h:'#B9A7E8'}
+];
+
+const GOALS=[
+ {id:'tall',name:'키가 커 보이게',tip:'세로선, 위아래 비슷한 색(원톤), 긴 겉옷이 도움이 돼요.'},
+ {id:'legs',name:'다리가 길어 보이게',tip:'허리선이 높아 보이는 크롭 상의, 나팔바지, 다리 선이 드러나는 하의가 도움이 돼요.'},
+ {id:'wide',name:'어깨가 넓어 보이게',tip:'가로선, 밝은 색, 부피감 있는 상의가 도움이 돼요.'},
+ {id:'narrow',name:'어깨가 좁아 보이게',tip:'어두운 색, 세로선, V넥이 도움이 돼요.'},
+ {id:'balance',name:'상체와 하체 균형 맞추기',tip:'더 돋보이게 하고 싶은 쪽을 밝게·넓게·가로선으로 표현해 보세요.'},
+ {id:'slim',name:'얼굴이 갸름해 보이게',tip:'V넥처럼 목선이 길게 열린 네크라인이 도움이 돼요.'},
+ {id:'soft',name:'부드러운 인상',tip:'니트·가디건 같은 포근한 재질과 연한 색이 도움이 돼요.'},
+ {id:'active',name:'활동적인 인상',tip:'후드티·추리닝·운동화처럼 편안한 옷이 도움이 돼요.'},
+ {id:'neat',name:'단정한 인상',tip:'셔츠·재킷·로퍼처럼 반듯한 옷이 도움이 돼요.'}
+];
+const GOAL_BY=Object.fromEntries(GOALS.map(g=>[g.id,g]));
+const CONFLICT={wide:'narrow',narrow:'wide'};
+const HINT={
+ tall:'세로 줄무늬 티셔츠, 위아래 비슷한 색, 롱코트를 써 보세요.',
+ legs:'크롭 상의나 나팔바지, 신발과 바지를 비슷한 색으로 맞춰 보세요.',
+ wide:'가로 줄무늬나 밝은 색 상의, 오버핏 맨투맨을 써 보세요.',
+ narrow:'어두운 색 상의, 세로 줄무늬, V넥을 써 보세요.',
+ slim:'상의를 V넥으로 바꿔 보세요.',
+ soft:'니트나 가디건, 연한 색, A라인 치마를 써 보세요.',
+ active:'후드티나 추리닝 바지, 운동화를 써 보세요.',
+ neat:'셔츠나 재킷, 로퍼, 어둡고 차분한 색을 써 보세요.'
+};
+const METERS=[['tall','세로로 길어 보임',50],['upper','어깨·상체 강조',50],['lower','하체 강조',50],['slim','얼굴 갸름해 보임',50],['soft','인상: 부드러움',40],['active','인상: 활동적',40],['neat','인상: 단정',40]];
+
+/* ================= 상태 ================= */
+const initial=()=>({
+ avatar:{face:'round',skin:1,undertone:'yellow',hair:0,hairColor:0,height:'mid',shoulder:'mid',body:'straight'},
+ outfit:{top:'plain',topColor:'#FFFFFF',neck:'round',bottom:'straight',bottomColor:'#4D6FA3',outer:'none',outerColor:'#4A4D55',shoes:'sneakers',shoesColor:'#FFFFFF'},
+ goals:[],myColors:[],saved:{A:null,B:null},name:'',desc:''
+});
+let st=initial();
+let screen='start';
+let tabs={avatar:'face',coordi:'top'};
+let drape={a:'coral',b:'sky',cmp:false,side:'a'};
+
+/* ================= 색 유틸 ================= */
+function hex2rgb(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function rgb2hex(r,g,b){return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');}
+function shade(hex,amt){const [r,g,b]=hex2rgb(hex);const t=amt<0?0:255,p=Math.abs(amt);return rgb2hex(r+(t-r)*p,g+(t-g)*p,b+(t-b)*p);}
+function hsl(hex){const [r,g,b]=hex2rgb(hex).map(v=>v/255);const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;const d=mx-mn;
+ if(d){s=l>.5?d/(2-mx-mn):d/(mx+mn);if(mx===r)h=(g-b)/d+(g<b?6:0);else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60;}
+ return {h,s,l};}
+function cinfo(hex){const {h,s,l}=hsl(hex);const neutral=s<.14;const dark=l<.32;const bright=l>.62;
+ const warm=!neutral&&(h<70||h>=330);const cool=!neutral&&h>=160&&h<300;
+ return {h,s,l,neutral,dark,bright,warm,cool,exp:(bright?1:0)-(dark?1:0)+(warm?1:0)-(cool?1:0)};}
+function cdist(a,b){const x=hex2rgb(a),y=hex2rgb(b);return Math.hypot(x[0]-y[0],x[1]-y[1],x[2]-y[2]);}
+const sameHex=(a,b)=>a.toLowerCase()===b.toLowerCase();
+function colorName(hex){const c=DRAPE_COLORS.find(x=>sameHex(x.h,hex))||BASIC.find(x=>sameHex(x.h,hex));return c?(c.n):'선택한 색';}
+
+/* ================= 아바타 SVG ================= */
+let _pid=0;
+function dims(a){
+ const sh={narrow:46,mid:56,wide:68}[a.shoulder];let ch,wa,hp;
+ switch(a.body){
+  case 'upper':ch=sh+4;wa=ch-6;hp=Math.max(30,sh-16);break;
+  case 'lower':ch=sh-14;wa=ch-6;hp=ch+30;break;
+  case 'curvy':ch=sh-6;wa=ch-20;hp=ch+16;break;
+  default:ch=sh-6;wa=ch-2;hp=ch;
+ }
+ return {sh,ch,wa,hp};
+}
+function wAt(D,y){
+ const P=[[160,D.sh],[215,D.ch],[292,D.wa],[332,D.hp],[700,D.hp]];
+ if(y<=P[0][0])return P[0][1];
+ for(let i=1;i<P.length;i++){if(y<=P[i][0]){const a=P[i-1],b=P[i];return a[1]+(b[1]-a[1])*(y-a[0])/(b[0]-a[0]);}}
+ return D.hp;
+}
+const pts=arr=>arr.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+const sideY=hem=>{const ys=[168,215,252,292,332,380,430,470].filter(y=>y<hem-4);ys.push(hem);return ys;};
+const edgeW=(D,y,ease,fl)=>wAt(D,y)+ease+(y>332?(y-332)*fl:0);
+function torsoPath(D,hem,ease,fl=0){
+ const ys=sideY(hem);
+ const L=ys.map(y=>[150-edgeW(D,y,ease,fl),y]);
+ const R=ys.map(y=>[150+edgeW(D,y,ease,fl),y]).reverse();
+ return pts([[138,156],[150-D.sh-ease,164],...L,...R,[150+D.sh+ease,164],[162,156]]);
+}
+function panelPts(D,sd,hem,ease,fl){
+ const ys=sideY(hem);
+ const outer=ys.map(y=>[150+sd*edgeW(D,y,ease,fl),y]);
+ return pts([[150+sd*13,157],[150+sd*(D.sh+ease),164],...outer,[150+sd*13,hem]]);
+}
+
+function hairBack(a,hc){
+ const s=`fill="${hc}" stroke="${shade(hc,-.3)}" stroke-width="1.2"`;
+ if(a.hair===1)return `<path d="M100,70 C94,110 96,138 108,150 L192,150 C204,138 206,110 200,70 C196,36 104,36 100,70Z" ${s}/>`;
+ if(a.hair===2)return `<path d="M98,72 C88,120 94,190 88,236 L212,236 C206,190 212,120 202,72 C196,34 104,34 98,72Z" ${s}/>`;
+ if(a.hair===3)return `<path d="M180,46 C224,34 246,76 232,122 C226,142 212,150 204,160 C208,128 200,96 178,72Z" ${s}/>`;
+ return '';
+}
+function hairFront(a,hc){
+ const s=`fill="${hc}" stroke="${shade(hc,-.3)}" stroke-width="1.2"`;
+ let o=`<path d="M106,92 C100,52 124,36 150,36 C178,36 200,52 194,92 C188,74 178,64 160,60 C140,68 118,70 106,92Z" ${s}/>`;
+ if(a.hair===3)o+=`<circle cx="186" cy="58" r="5.5" fill="#ff6b8b" stroke="#d94a6b" stroke-width="1"/>`;
+ return o;
+}
+function faceSVG(a){
+ const sk=SKIN[a.undertone][a.skin],ol=shade(sk,-.2);
+ const ey=a.face==='long'?100:94,my=a.face==='long'?124:118;
+ return `<path d="${FACE_D[a.face]}" fill="${sk}" stroke="${ol}" stroke-width="1.4"/>`
+ +`<ellipse cx="132" cy="${ey}" rx="3.6" ry="4.6" fill="#2b2630"/><ellipse cx="168" cy="${ey}" rx="3.6" ry="4.6" fill="#2b2630"/>`
+ +`<path d="M124,${ey-12} Q132,${ey-16} 140,${ey-12} M160,${ey-12} Q168,${ey-16} 176,${ey-12}" stroke="#4a3f46" stroke-width="2.2" fill="none" stroke-linecap="round"/>`
+ +`<circle cx="124" cy="${ey+13}" r="6" fill="#ff7a8a" opacity=".22"/><circle cx="176" cy="${ey+13}" r="6" fill="#ff7a8a" opacity=".22"/>`
+ +`<path d="M150,${ey+4} q-3,9 1,11" stroke="${ol}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`
+ +`<path d="M143,${my} Q150,${my+7} 157,${my}" stroke="#b25c5c" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+}
+
+function legsSkin(D,skin,skinO){
+ let s='';
+ [-1,1].forEach(sd=>{
+  s+=`<polygon points="${pts([[150+sd*D.hp,330],[150+sd*1,330],[150+sd*5,440],[150+sd*12,546],[150+sd*28,546],[150+sd*(D.hp*.58+8),440]])}" fill="${skin}" stroke="${skinO}" stroke-width="1"/>`;
+ });
+ return s;
+}
+function shoesSVG(o,skin,skinO){
+ const c=o.shoesColor,ol=shade(c,-.3);let s='';
+ [-1,1].forEach(sd=>{
+  const cx=150+sd*20;
+  if(o.shoes==='sneakers'){
+   s+=`<path d="M${cx-17},541 Q${cx-17},535 ${cx-10},535 L${cx+8},535 Q${cx+18},538 ${cx+18},551 L${cx+18},555 Q${cx+18},560 ${cx+13},560 L${cx-13},560 Q${cx-17},560 ${cx-17},555Z" fill="${c}" stroke="${ol}" stroke-width="1.3"/>`
+   +`<rect x="${cx-17}" y="554" width="35" height="6" rx="3" fill="#fff" stroke="#bdb5c2" stroke-width="1"/>`
+   +`<path d="M${cx-7},540 L${cx+5},540 M${cx-7},545 L${cx+7},545" stroke="${ol}" stroke-width="1.3" opacity=".6"/>`;
+  }else if(o.shoes==='loafers'){
+   s+=`<path d="M${cx-16},546 Q${cx-16},541 ${cx-8},541 L${cx+8},541 Q${cx+18},544 ${cx+18},553 L${cx+18},557 Q${cx+18},560 ${cx+14},560 L${cx-12},560 Q${cx-16},560 ${cx-16},555Z" fill="${c}" stroke="${ol}" stroke-width="1.3"/>`
+   +`<path d="M${cx-5},548 L${cx+10},548" stroke="${ol}" stroke-width="1.6" stroke-linecap="round"/><rect x="${cx-16}" y="557" width="34" height="3" rx="1.5" fill="${shade(c,-.5)}"/>`;
+  }else if(o.shoes==='sandals'){
+   s+=`<path d="M${cx-14},542 L${cx+14},542 L${cx+16},558 Q${cx+16},560 ${cx+13},560 L${cx-13},560 Q${cx-16},560 ${cx-16},558Z" fill="${skin}" stroke="${skinO}" stroke-width="1"/>`
+   +`<rect x="${cx-17}" y="557" width="34" height="4" rx="2" fill="${c}" stroke="${ol}" stroke-width="1"/>`
+   +`<path d="M${cx-14},548 L${cx+14},548 M${cx-13},553 L${cx+13},553" stroke="${c}" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;
+  }else{
+   s+=`<path d="M${cx-14},488 L${cx+14},488 L${cx+14},538 Q${cx+19},542 ${cx+18},552 L${cx+18},556 Q${cx+18},560 ${cx+15},560 L${cx-15},560 Q${cx-18},560 ${cx-18},556 L${cx-18},552 Q${cx-19},542 ${cx-14},538Z" fill="${c}" stroke="${ol}" stroke-width="1.3"/>`
+   +`<rect x="${cx-18}" y="556" width="36" height="4" rx="2" fill="${shade(c,-.5)}"/><path d="M${cx-14},494 L${cx+14},494" stroke="${ol}" stroke-width="1.2" opacity=".6"/>`;
+  }
+ });
+ return s;
+}
+
+function bottomSVG(o,D){
+ const c=o.bottomColor,ol=shade(c,-.3),X=150,hp=D.hp,wa=D.wa;
+ const stl=`fill="${c}" stroke="${ol}" stroke-width="1.3" stroke-linejoin="round"`;
+ const band=`<rect x="${X-wa-2}" y="289" width="${2*wa+4}" height="9" rx="3" fill="${shade(c,-.12)}" stroke="${ol}" stroke-width="1"/>`;
+ let s='';
+ if(o.bottom==='aline'){
+  const hw=hp+30;
+  s=`<path d="M${X-wa-2},292 L${X+wa+2},292 L${X+hp+3},332 L${X+hw},414 Q${X},424 ${X-hw},414 L${X-hp-3},332Z" ${stl}/>`
+  +`<path d="M${X-14},340 L${X-26},416 M${X+14},340 L${X+26},416 M${X},340 L${X},420" stroke="${ol}" stroke-width="1.2" opacity=".25" fill="none"/>`+band;
+ }else if(o.bottom==='hline'){
+  s=`<path d="M${X-wa-2},292 L${X+wa+2},292 L${X+hp+3},332 L${X+hp+1},422 Q${X},428 ${X-hp-1},422 L${X-hp-3},332Z" ${stl}/>`
+  +`<path d="M${X},340 L${X},424" stroke="${ol}" stroke-width="1.2" opacity=".25"/>`+band;
+ }else{
+  const P={
+   skinny:{kY:432,kOut:hp*.62+12,kIn:6,hOut:29,hIn:11,hY:532},
+   straight:{kY:432,kOut:hp+1,kIn:4,hOut:hp*.9+6,hIn:5,hY:536},
+   wide:{kY:432,kOut:hp+14,kIn:2,hOut:hp+26,hIn:3,hY:544},
+   flare:{kY:432,kOut:hp*.6+12,kIn:7,hOut:hp*.5+36,hIn:3,hY:548},
+   jogger:{kY:432,kOut:hp+4,kIn:5,hOut:36,hIn:7,hY:528},
+   shorts:{kY:402,kOut:hp+8,kIn:3,hOut:hp+8,hIn:3,hY:402}
+  }[o.bottom];
+  [-1,1].forEach(sd=>{
+   s+=`<polygon points="${pts([[X+sd*(hp+2),326],[X+sd*1,326],[X+sd*P.kIn,P.kY],[X+sd*P.hIn,P.hY],[X+sd*P.hOut,P.hY],[X+sd*P.kOut,P.kY]])}" ${stl}/>`;
+   if(o.bottom==='jogger'){
+    const tt=(514-P.kY)/(P.hY-P.kY),oo=P.kOut+(P.hOut-P.kOut)*tt,ii=P.kIn+(P.hIn-P.kIn)*tt;
+    s+=`<polygon points="${pts([[X+sd*ii,514],[X+sd*oo,514],[X+sd*P.hOut,P.hY],[X+sd*P.hIn,P.hY]])}" fill="${shade(c,-.18)}" stroke="${ol}" stroke-width="1"/>`;
+    s+=`<path d="M${X+sd*(hp-2)},340 L${X+sd*(P.hOut-3)},512" stroke="${hsl(c).l>.55?shade(c,-.5):'#fff'}" stroke-width="3" opacity=".75" fill="none"/>`;
+   }
+   if(o.bottom==='shorts'){
+    s+=`<polygon points="${pts([[X+sd*P.hIn,392],[X+sd*P.hOut,392],[X+sd*P.hOut,P.hY],[X+sd*P.hIn,P.hY]])}" fill="${shade(c,-.12)}" stroke="${ol}" stroke-width="1"/>`;
+   }
+  });
+  s+=`<polygon points="${pts([[X-wa-2,292],[X+wa+2,292],[X+hp+2,328],[X-hp-2,328]])}" fill="${c}"/>`
+  +`<path d="M${X-wa-2},292 L${X-hp-2},328 M${X+wa+2},292 L${X+hp+2},328" stroke="${ol}" stroke-width="1.3" fill="none"/>`
+  +`<path d="M${X},298 L${X},327" stroke="${ol}" stroke-width="1.2" opacity=".5"/>`
+  +`<path d="M${X-wa+3},302 Q${X-wa+12},320 ${X-wa+24},306 M${X+wa-3},302 Q${X+wa-12},320 ${X+wa-24},306" stroke="${ol}" stroke-width="1.1" fill="none" opacity=".4"/>`+band;
+ }
+ return s;
+}
+
+function armsSVG(D,skin,skinO){
+ let s='';
+ [-1,1].forEach(sd=>{
+  const x0=150+sd*(D.sh-3),x1=150+sd*(D.sh+5);
+  s+=`<path d="M${x0},172 L${x1},302" stroke="${skinO}" stroke-width="17" stroke-linecap="round" fill="none"/>`
+  +`<path d="M${x0},172 L${x1},302" stroke="${skin}" stroke-width="14.5" stroke-linecap="round" fill="none"/>`
+  +`<circle cx="${x1+sd*0.5}" cy="310" r="9" fill="${skin}" stroke="${skinO}" stroke-width="1.2"/>`;
+ });
+ return s;
+}
+function sleevesSVG(D,ease,yEnd,w,fill,c,cuff){
+ const ol=shade(c,-.3);let s='';
+ const geo=sd=>{const x0=150+sd*(D.sh+ease-5),y0=172,x1=x0+sd*(4+(yEnd-172)*.07);return {x0,y0,x1,y1:yEnd};};
+ [-1,1].forEach(sd=>{const g=geo(sd);
+  s+=`<path d="M${g.x0},${g.y0} L${g.x1},${g.y1}" stroke="${ol}" stroke-width="${w+2.6}" fill="none"/><circle cx="${g.x0}" cy="${g.y0+1}" r="${w/2+1.3}" fill="${ol}"/>`;});
+ [-1,1].forEach(sd=>{const g=geo(sd);
+  s+=`<path d="M${g.x0},${g.y0} L${g.x1},${g.y1}" stroke="${fill}" stroke-width="${w}" fill="none"/><circle cx="${g.x0}" cy="${g.y0+1}" r="${w/2}" fill="${fill}"/>`;
+  if(cuff){const t=1-9/(yEnd-172);const xa=g.x0+(g.x1-g.x0)*t;
+   s+=`<path d="M${xa},${yEnd-9} L${g.x1},${yEnd}" stroke="${shade(c,-.14)}" stroke-width="${w}" fill="none"/>`
+   +`<path d="M${xa-w/2},${yEnd-9} L${xa+w/2},${yEnd-9}" stroke="${ol}" stroke-width="1" opacity=".6"/>`;}
+ });
+ return s;
+}
+
+const TOPSPEC={
+ shirt:{hem:322,ease:4,sl:298,sw:19},hoodie:{hem:328,ease:9,sl:302,sw:23},wind:{hem:326,ease:10,sl:304,sw:24},
+ hstripe:{hem:318,ease:3,sl:222,sw:22},vstripe:{hem:318,ease:3,sl:222,sw:22},plain:{hem:318,ease:3,sl:222,sw:22},
+ knit:{hem:322,ease:5,sl:300,sw:21},sweat:{hem:338,ease:15,sl:306,sw:30},crop:{hem:244,ease:2,sl:218,sw:21}
+};
+const OUTSPEC={jacket:{hem:332,ease:10,sl:304,sw:24,fl:0},cardigan:{hem:346,ease:11,sl:304,sw:23,fl:0},coat:{hem:468,ease:14,sl:306,sw:26,fl:.14}};
+
+function topSVG(o,D,pid,skin,skinO,R){
+ const sp=TOPSPEC[o.top],c=o.topColor,ol=shade(c,-.3);
+ const alt=hsl(c).l>.55?shade(c,-.55):'#ffffff';
+ let fill=c;
+ if(o.top==='hstripe'){R.defs+=`<pattern id="${pid}t" patternUnits="userSpaceOnUse" width="20" height="17"><rect width="20" height="17" fill="${c}"/><rect width="20" height="7.5" fill="${alt}"/></pattern>`;fill=`url(#${pid}t)`;}
+ if(o.top==='vstripe'){R.defs+=`<pattern id="${pid}t" patternUnits="userSpaceOnUse" width="14" height="20"><rect width="14" height="20" fill="${c}"/><rect width="6.5" height="20" fill="${alt}"/></pattern>`;fill=`url(#${pid}t)`;}
+ if(o.top==='knit'){R.defs+=`<pattern id="${pid}t" patternUnits="userSpaceOnUse" width="5" height="5"><rect width="5" height="5" fill="${c}"/><rect width="5" height="1.6" fill="${shade(c,-.1)}"/></pattern>`;fill=`url(#${pid}t)`;}
+ const cuff=o.top==='knit'||o.top==='sweat'||o.top==='hoodie';
+ let s=sleevesSVG(D,sp.ease,sp.sl,sp.sw,fill,c,cuff);
+ s+=`<polygon points="${torsoPath(D,sp.hem,sp.ease)}" fill="${fill}" stroke="${ol}" stroke-width="1.3" stroke-linejoin="round"/>`;
+ const hw=y=>edgeW(D,y,sp.ease,0);
+ if(o.top==='knit'||o.top==='sweat'){
+  const hm=sp.hem;
+  s+=`<polygon points="${pts([[150-hw(hm-9),hm-9],[150+hw(hm-9),hm-9],[150+hw(hm),hm],[150-hw(hm),hm]])}" fill="${shade(c,-.14)}" stroke="${ol}" stroke-width="1"/>`;
+ }
+ if(o.top==='sweat')s+=`<path d="M${150-D.sh-4},176 Q${150-D.sh-8},200 ${150-D.ch-8},214 M${150+D.sh+4},176 Q${150+D.sh+8},200 ${150+D.ch+8},214" stroke="${ol}" stroke-width="1.2" fill="none" opacity=".5"/>`;
+ if(o.top==='shirt'){
+  s+=`<polygon points="138,152 150,176 162,152" fill="${skin}"/>`
+  +`<polygon points="${pts([[136,148],[150,176],[126,184],[116,164]])}" fill="${shade(c,.15)}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/>`
+  +`<polygon points="${pts([[164,148],[150,176],[174,184],[184,164]])}" fill="${shade(c,.15)}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/>`
+  +`<path d="M150,178 L150,${sp.hem}" stroke="${ol}" stroke-width="1.2" opacity=".55"/>`;
+  for(let y=192;y<310;y+=28)s+=`<circle cx="150" cy="${y}" r="2.6" fill="${shade(c,-.18)}" stroke="${ol}" stroke-width=".8"/>`;
+ }
+ if(o.top==='hoodie'){
+  s+=`<ellipse cx="150" cy="156" rx="31" ry="14" fill="none" stroke="${shade(c,-.1)}" stroke-width="9"/><ellipse cx="150" cy="156" rx="31" ry="14" fill="none" stroke="${ol}" stroke-width="1" opacity=".6"/>`
+  +`<path d="M140,168 L138,212 M160,168 L162,212" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".9"/>`
+  +`<path d="M${150-30},276 L${150+30},276 L${150+38},316 L${150-38},316Z" fill="${shade(c,-.07)}" stroke="${ol}" stroke-width="1.2"/>`;
+ }
+ if(o.top==='wind'){
+  s+=`<rect x="134" y="132" width="32" height="28" rx="8" fill="${shade(c,-.1)}" stroke="${ol}" stroke-width="1.3"/>`
+  +`<path d="M150,160 L150,${sp.hem}" stroke="${ol}" stroke-width="2.2"/><path d="M${150-D.ch+4},250 L${150+D.ch-4},250" stroke="${ol}" stroke-width="1.2" opacity=".4"/>`
+  +`<path d="M${150-30},296 L${150-30},316 M${150+30},296 L${150+30},316" stroke="${ol}" stroke-width="2" opacity=".6"/>`;
+ }
+ if(TOPS.find(t=>t.id===o.top).neck){
+  if(o.neck==='round')s+=`<path d="M128,158 Q150,190 172,158 Z" fill="${skin}"/><path d="M128,158 Q150,190 172,158" stroke="${ol}" stroke-width="1.4" fill="none"/>`;
+  else if(o.neck==='v')s+=`<path d="M131,157 L150,202 L169,157 Z" fill="${skin}"/><path d="M131,157 L150,202 L169,157" stroke="${ol}" stroke-width="1.4" fill="none" stroke-linejoin="round"/>`;
+  else s+=`<rect x="136" y="128" width="28" height="34" rx="9" fill="${shade(c,-.05)}" stroke="${ol}" stroke-width="1.3"/><path d="M137,138 L163,138 M137,146 L163,146 M137,154 L163,154" stroke="${ol}" stroke-width="1" opacity=".35"/>`;
+ }
+ return s;
+}
+function outerSVG(o,D){
+ if(o.outer==='none')return '';
+ const sp=OUTSPEC[o.outer],c=o.outerColor,ol=shade(c,-.32);
+ let s=sleevesSVG(D,sp.ease,sp.sl,sp.sw,c,c,o.outer==='cardigan');
+ [-1,1].forEach(sd=>{s+=`<polygon points="${panelPts(D,sd,sp.hem,sp.ease,sp.fl)}" fill="${c}" stroke="${ol}" stroke-width="1.3" stroke-linejoin="round"/>`;});
+ if(o.outer==='jacket'||o.outer==='coat'){
+  [-1,1].forEach(sd=>{s+=`<polygon points="${pts([[150+sd*13,157],[150+sd*40,182],[150+sd*22,208],[150+sd*13,198]])}" fill="${shade(c,-.1)}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/>`;});
+ }
+ if(o.outer==='jacket')[-1,1].forEach(sd=>{s+=`<path d="M${150+sd*24},282 L${150+sd*42},282" stroke="${ol}" stroke-width="1.8" stroke-linecap="round"/>`;});
+ if(o.outer==='coat'){for(const y of [232,282,332])s+=`<circle cx="${150+22}" cy="${y}" r="3.2" fill="${shade(c,-.3)}" stroke="${ol}" stroke-width=".8"/>`;
+  s+=`<path d="M${150-D.hp-20},352 L${150+D.hp+20},352" stroke="${ol}" stroke-width="1" opacity=".25"/>`;}
+ if(o.outer==='cardigan'){[-1,1].forEach(sd=>{s+=`<path d="M${150+sd*13},160 L${150+sd*13},${sp.hem}" stroke="${shade(c,-.18)}" stroke-width="6"/>`;});
+  [-1,1].forEach(sd=>{s+=`<path d="M${150+sd*(D.hp+11)},${sp.hem-8} L${150+sd*2},${sp.hem-8}" stroke="${ol}" stroke-width="1" opacity=".4"/>`;});}
+ return s;
+}
+
+function avatarSVG(stx,pidIn,size){
+ const pid=pidIn||('a'+(++_pid));
+ const a=stx.avatar,o=stx.outfit,D=dims(a);
+ const skin=SKIN[a.undertone][a.skin],skinO=shade(skin,-.2),hc=HAIR_COLORS[a.hairColor].hex;
+ const sc=a.height==='short'?.92:a.height==='tall'?1.06:1;
+ const R={defs:''};let g='';
+ g+=hairBack(a,hc);
+ g+=legsSkin(D,skin,skinO);
+ g+=shoesSVG(o,skin,skinO);
+ g+=`<rect x="138" y="124" width="24" height="40" rx="8" fill="${shade(skin,-.06)}"/>`;
+ g+=`<polygon points="${torsoPath(D,336,0)}" fill="${skin}" stroke="${skinO}" stroke-width="1"/>`;
+ g+=bottomSVG(o,D);
+ g+=armsSVG(D,skin,skinO);
+ g+=topSVG(o,D,pid,skin,skinO,R);
+ g+=outerSVG(o,D);
+ g+=faceSVG(a)+hairFront(a,hc);
+ const dim=size?` width="${size[0]}" height="${size[1]}"`:'';
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 580"${dim} role="img" aria-label="나의 아바타"><defs>${R.defs}</defs>`
+ +`<ellipse cx="150" cy="563" rx="84" ry="9" fill="#000" opacity=".09"/>`
+ +`<g transform="translate(150 562) scale(${sc}) translate(-150 -562)">${g}</g></svg>`;
+}
+function drapeSVG(a,hex){
+ const skin=SKIN[a.undertone][a.skin],skinO=shade(skin,-.2),hc=HAIR_COLORS[a.hairColor].hex,cl=shade(hex,-.22);
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 20 220 240" role="img" aria-label="색 천을 댄 아바타">`
+ +hairBack(a,hc)
+ +`<polygon points="138,126 162,126 162,140 188,153 150,192 112,153 138,140" fill="${skin}" stroke="${skinO}" stroke-width="1"/>`
+ +`<path d="M30,262 L34,208 Q54,168 112,153 L150,190 L188,153 Q246,168 266,208 L270,262Z" fill="${hex}" stroke="${cl}" stroke-width="1.6" stroke-linejoin="round"/>`
+ +`<path d="M66,262 Q74,214 104,178 M234,262 Q226,214 196,178" stroke="#fff" stroke-opacity=".28" stroke-width="7" fill="none" stroke-linecap="round"/>`
+ +faceSVG(a)+hairFront(a,hc)+`</svg>`;
+}
+
+/* ================= 효과 계산 ================= */
+function effects(stx){
+ const o=stx.outfit,ef=[];const add=(m,d,t)=>ef.push({m,d,t:t||''});
+ switch(o.top){
+  case 'hstripe':add('upper',14,'가로 줄무늬 티셔츠의 가로선이 어깨와 상체를 넓어 보이게 해요.');add('tall',-8,'가로선은 시선을 옆으로 이끌어 몸이 넓고 짧아 보이게 해요.');break;
+  case 'vstripe':add('tall',16,'세로 줄무늬 티셔츠의 세로선이 몸을 길고 가늘어 보이게 해요.');add('upper',-6,'세로선이 상체를 갸름하고 길어 보이게 해요.');break;
+  case 'shirt':add('neat',14,'셔츠의 반듯한 칼라가 단정한 인상을 줘요.');break;
+  case 'hoodie':add('active',14,'후드티의 편안한 실루엣이 활동적인 인상을 줘요.');add('upper',6,'후드티의 부피감이 상체를 조금 더 커 보이게 해요.');break;
+  case 'wind':add('active',14,'바람막이의 스포티한 느낌이 활동적인 인상을 줘요.');add('upper',10,'바람막이의 부피감이 어깨와 상체를 넓어 보이게 해요.');break;
+  case 'knit':add('soft',14,'니트의 포근한 재질이 부드러운 인상을 줘요.');add('upper',4,'니트의 도톰한 질감이 상체에 볼륨을 더해요.');break;
+  case 'sweat':add('upper',12,'오버핏 맨투맨의 넉넉한 부피감이 어깨와 상체를 넓어 보이게 해요.');add('active',8,'오버핏 실루엣이 편안하고 활동적인 인상을 줘요.');add('lower',-4,'넉넉한 길이가 엉덩이 선을 부드럽게 덮어 줘요.');break;
+  case 'crop':add('legs',14,'크롭 상의가 허리선을 높아 보이게 해서 다리가 길어 보여요.');add('upper',-4,'짧은 길이가 상체를 가볍고 작아 보이게 해요.');add('active',6,'크롭 상의가 경쾌한 인상을 줘요.');break;
+  default:break;
+ }
+ if(TOPS.find(t=>t.id===o.top).neck){
+  if(o.neck==='v'){add('slim',14,'V넥이 목과 얼굴을 길어 보이게 해서 갸름해 보여요.');add('upper',-4,'V넥의 세로 라인이 어깨선을 좁아 보이게 해요.');add('tall',4);}
+  else if(o.neck==='turtle'){add('slim',-12,'터틀넥이 얼굴을 짧아 보이게 해서 긴 얼굴형과 균형이 잘 맞아요.');add('upper',4);add('neat',4);}
+  else add('slim',-4,'라운드넥이 얼굴을 조금 짧아 보이게 해요.');
+ }
+ switch(o.bottom){
+  case 'flare':add('legs',14,'나팔바지가 아래로 넓어지며 다리가 길어 보이게 해요.');add('lower',6,'나팔바지 밑단의 볼륨이 하체에 시선을 모아 줘요.');break;
+  case 'skinny':add('lower',10,'스키니바지가 다리 선을 그대로 보여 줘요.');add('active',4);break;
+  case 'straight':add('tall',4,'일자 청바지의 곧은 선이 다리를 길게 이어 줘요.');add('neat',4,'일자 청바지의 깔끔한 선이 단정한 느낌을 더해요.');break;
+  case 'wide':add('lower',-12,'와이드팬츠가 하체 볼륨을 자연스럽게 감춰 줘요.');add('tall',4,'넓게 떨어지는 선이 다리를 길어 보이게 해요.');add('soft',6);add('active',4);break;
+  case 'jogger':add('active',14,'추리닝 바지가 편안하고 활동적인 인상을 줘요.');break;
+  case 'shorts':add('legs',6,'반바지로 다리 선이 드러나 다리가 길어 보여요.');add('active',10,'반바지가 경쾌하고 활동적인 인상을 줘요.');add('lower',6,'다리 라인이 드러나 하체에 시선이 모여요.');break;
+  case 'aline':add('soft',10,'A라인 치마의 퍼지는 선이 부드러운 인상을 줘요.');add('lower',6,'A라인 치마의 퍼지는 선이 하체를 풍성해 보이게 해요.');break;
+  case 'hline':add('neat',10,'H라인 치마의 곧은 선이 단정한 인상을 줘요.');add('tall',6,'H라인 치마의 곧은 선이 세로로 길어 보이게 해요.');break;
+ }
+ switch(o.outer){
+  case 'jacket':add('upper',8,'재킷이 어깨선을 또렷하게 만들어 어깨가 더 돋보여요.');add('neat',14,'재킷의 반듯한 어깨선이 단정한 인상을 줘요.');add('tall',4,'재킷 앞의 세로 라인이 키를 길어 보이게 해요.');break;
+  case 'cardigan':add('soft',14,'가디건의 부드러운 재질이 포근한 인상을 줘요.');add('tall',6,'가디건 앞이 열려 세로선이 생겨서 길어 보여요.');break;
+  case 'coat':add('tall',12,'롱코트의 긴 세로선이 키를 커 보이게 해요.');add('neat',10,'롱코트가 차분하고 단정한 인상을 줘요.');add('lower',-8,'롱코트가 하체 윤곽을 부드럽게 덮어 줘요.');add('upper',6,'롱코트의 어깨선과 부피감이 상체에 힘을 줘요.');break;
+ }
+ switch(o.shoes){
+  case 'sneakers':add('active',10,'운동화가 활동적인 인상을 더해요.');break;
+  case 'loafers':add('neat',10,'로퍼가 단정한 인상을 더해요.');break;
+  case 'sandals':add('soft',6,'샌들이 가볍고 부드러운 인상을 더해요.');add('legs',4,'샌들이 발등을 드러내 다리 선이 길게 이어져 보여요.');break;
+  case 'boots':add('tall',6,'부츠가 시선을 길게 이어 키가 커 보여요.');add('active',4);break;
+ }
+ /* 색 */
+ const hasOut=o.outer!=='none';
+ const uc=hasOut?o.outerColor:o.topColor,ui=cinfo(uc),bi=cinfo(o.bottomColor);
+ const un=hasOut?'겉옷이':'상의가';
+ if(ui.exp>=1)add('upper',ui.exp*5,`밝거나 따뜻한 색의 ${un} 상체를 더 커 보이게 해요.`);
+ if(ui.exp<=-1)add('upper',ui.exp*5,`어둡거나 차가운 색의 ${un} 상체를 더 작아 보이게 해요.`);
+ if(bi.exp>=1)add('lower',bi.exp*5,'밝거나 따뜻한 색의 하의가 하체를 더 커 보이게 해요.');
+ if(bi.exp<=-1)add('lower',bi.exp*5,'어둡거나 차가운 색의 하의가 하체를 더 작아 보이게 해요.');
+ if(LONGPANTS.includes(o.bottom)){
+  const d=cdist(uc,o.bottomColor),dl=Math.abs(ui.l-bi.l);
+  if(d<85)add('tall',14,'위아래가 비슷한 색이라 세로로 이어져 키가 커 보여요.');
+  else if(dl>=.45)add('tall',-10,'위아래 색 대비가 강해서 상체와 하체가 또렷하게 나뉘어 보여요.');
+  if(o.shoes!=='sandals'&&cdist(o.shoesColor,o.bottomColor)<85)add('legs',6,'신발과 바지 색이 비슷해 다리 선이 길게 이어져 보여요.');
+ }
+ if(ui.dark||(ui.neutral&&ui.l<.8))add('neat',6,'차분한 색이 단정한 인상을 더해요.');
+ else if(ui.l>.72&&!ui.neutral&&ui.s<.95)add('soft',6,'연하고 맑은 색이 부드러운 인상을 더해요.');
+ else if(ui.s>.55&&!ui.neutral)add('active',6,'선명한 색이 활기찬 인상을 더해요.');
+ return ef;
+}
+function meters(stx){
+ const ef=effects(stx);const M={tall:50,upper:50,lower:50,slim:50,soft:40,active:40,neat:40,legs:0};
+ ef.forEach(e=>{if(e.m==='legs'){M.legs+=e.d;M.tall+=e.d*.5;}else M[e.m]+=e.d;});
+ ['tall','upper','lower','slim','soft','active','neat'].forEach(k=>M[k]=Math.max(0,Math.min(100,Math.round(M[k]))));
+ return {M,ef};
+}
+function goalEval(stx,M){
+ return stx.goals.map(id=>{
+  let ok=false,ms=[];
+  switch(id){
+   case 'tall':ok=M.tall>=60;ms=['tall'];break;
+   case 'legs':ok=M.legs>=10;ms=['tall'];break;
+   case 'wide':ok=M.upper>=60;ms=['upper'];break;
+   case 'narrow':ok=M.upper<=40;ms=['upper'];break;
+   case 'balance':{const u=M.upper-50,l=M.lower-50,b=stx.avatar.body;ok=b==='upper'?(l-u>=8):b==='lower'?(u-l>=8):Math.abs(u-l)<=8;ms=['upper','lower'];break;}
+   case 'slim':ok=M.slim>=60;ms=['slim'];break;
+   case 'soft':ok=M.soft>=60;ms=['soft'];break;
+   case 'active':ok=M.active>=60;ms=['active'];break;
+   case 'neat':ok=M.neat>=60;ms=['neat'];break;
+  }
+  return {id,ok,ms};
+ });
+}
+function goalScore(id,M,body){
+ switch(id){
+  case 'tall':return M.tall;case 'legs':return M.legs;case 'wide':return M.upper;case 'narrow':return -M.upper;
+  case 'balance':{const u=M.upper-50,l=M.lower-50;return body==='upper'?(l-u):body==='lower'?(u-l):-Math.abs(u-l);}
+  case 'slim':return M.slim;case 'soft':return M.soft;case 'active':return M.active;case 'neat':return M.neat;
+ }
+ return 0;
+}
+function wants(id){
+ switch(id){
+  case 'tall':return [['tall',1],['legs',1]];case 'legs':return [['legs',1]];
+  case 'wide':return [['upper',1]];case 'narrow':return [['upper',-1]];
+  case 'balance':return [['upper',0],['lower',0]];case 'slim':return [['slim',1]];
+  case 'soft':return [['soft',1]];case 'active':return [['active',1]];case 'neat':return [['neat',1]];
+ }
+ return [];
+}
+function sentences(stx,ef){
+ const W=[];stx.goals.forEach(g=>W.push(...wants(g)));
+ const rel=e=>W.some(w=>w[0]===e.m&&(w[1]===0||Math.sign(e.d)===w[1]));
+ const list=ef.filter(e=>e.t).map(e=>({t:e.t,s:(rel(e)?100:0)+Math.abs(e.d)})).sort((a,b)=>b.s-a.s);
+ const out=[];list.forEach(x=>{if(!out.includes(x.t)&&out.length<3)out.push(x.t);});
+ if(!out.length)out.push('색이나 무늬, 길이를 바꿔 보면 더 다양한 효과를 찾을 수 있어요.');
+ return out;
+}
+
+/* ================= 미터 HTML ================= */
+function metersHTML(stx,compact){
+ const {M,ef}=meters(stx);const ge=goalEval(stx,M);const tg={};
+ ge.forEach(r=>r.ms.forEach(m=>{tg[m]=tg[m]||{ok:true,names:[]};tg[m].names.push(GOAL_BY[r.id].name);if(!r.ok)tg[m].ok=false;}));
+ const row=(k,label,base,extra)=>{
+  const v=M[k],d=Math.round(v-base),ds=(d>0?'+':d<0?'−':'')+Math.abs(d);
+  const t=tg[k];const cls=t?(t.ok?'ok':'tg'):'';
+  const note=t?(t.ok?'✓ 목표 쪽으로 움직였어요!':'🎯 목표: '+t.names.join(', ')):'';
+  return `<div class="mrow ${cls}"><div class="mtop"><span>${label}</span><b>${ds}</b></div><div class="bar"><i style="width:${v}%"></i><u style="left:${base}%"></u></div>${note||extra?`<div class="mnote">${note}${note&&extra?' · ':''}${extra||''}</div>`:''}</div>`;
+ };
+ let h=`<div class="legend"><span><span class="dot" style="background:var(--green)"></span>목표 쪽으로 움직임</span><span><span class="dot" style="background:var(--violet)"></span>고른 목표</span><span>검은 눈금 = 기준선</span></div>`;
+ h+=row('tall','세로로 길어 보임',50,stxLegNote(M));
+ h+=row('upper','어깨·상체 강조',50);
+ h+=row('lower','하체 강조',50);
+ h+=row('slim','얼굴 갸름해 보임',50);
+ h+=`<h4 style="margin-top:6px">인상: 부드러움 ↔ 활동적 ↔ 단정</h4>`;
+ h+=row('soft','부드러움',40)+row('active','활동적',40)+row('neat','단정',40);
+ const sents=sentences(stx,ef);
+ h+=`<div class="effects"><h4>지금 코디에서 효과를 낸 요소</h4><ol>${sents.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div>`;
+ if(!stx.goals.length)h+=`<div class="note" style="margin-top:12px">연출 목표를 고르면 목표 쪽 미터가 초록색으로 강조돼요. (⑤ 연출 목표 단계에서 고를 수 있어요)</div>`;
+ else{
+  const bad=ge.filter(r=>!r.ok);
+  if(!bad.length)h+=`<div class="note green" style="margin-top:12px">🎉 고른 목표를 모두 잘 표현했어요! 어떤 요소가 도움이 됐는지 설명으로 써 볼까요?</div>`;
+  else h+=`<div class="note pink" style="margin-top:12px">${bad.map(r=>`<div>💡 이렇게 바꾸면 '${esc(GOAL_BY[r.id].name)}' 효과가 더 커져요: ${esc(r.id==='balance'?balanceHint(stx.avatar.body):HINT[r.id])}</div>`).join('')}</div>`;
+ }
+ return h;
+}
+function stxLegNote(M){return M.legs>0?`다리 길이 효과 +${Math.round(M.legs)}`:'';}
+function balanceHint(b){
+ if(b==='upper')return '하의를 밝은 색이나 넓은 실루엣(나팔바지·A라인 치마)으로 바꿔 보세요.';
+ if(b==='lower')return '상의를 밝은 색이나 가로 줄무늬로 바꿔 보세요.';
+ return '상의와 하의의 밝기와 부피감을 비슷하게 맞춰 보세요.';
+}
+
+/* ================= 공통 UI 헬퍼 ================= */
+const chip=(k,v,label,on,num,dis)=>`<button type="button" class="chip ${on?'on':''}" data-act="set" data-k="${k}" data-v="${esc(v)}"${num?' data-num="1"':''} aria-pressed="${on?'true':'false'}"${dis?' disabled':''}>${esc(label)}</button>`;
+const group=(label,html)=>`<div class="grp"><h4>${label}</h4><div class="chips">${html}</div></div>`;
+const tabBar=(scr,items)=>`<div class="tabs" role="tablist">${items.map(([k,l])=>`<button type="button" role="tab" aria-selected="${tabs[scr]===k}" class="tab ${tabs[scr]===k?'on':''}" data-act="tab" data-k="${scr}" data-v="${k}">${l}</button>`).join('')}</div>`;
+const nav=(prev,next,nl)=>`<div class="nav">${prev?`<button type="button" class="btn ghost" data-act="go" data-v="${prev}">← 이전</button>`:'<span></span>'}${next?`<button type="button" class="btn" data-act="go" data-v="${next}">${nl||'다음 단계로'} →</button>`:''}</div>`;
+function swatchRow(k,list,cur,starSet){
+ return list.map(c=>`<button type="button" class="sw ${sameHex(c.h,cur)?'on':''} ${starSet&&starSet.has(c.h)?'star':''}" style="background:${c.h}" data-act="set" data-k="${k}" data-v="${c.h}" aria-label="${esc(c.n)}" title="${esc(c.n)}"></button>`).join('');
+}
+let toastT;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);}
+function avatarSummary(){const a=st.avatar;return `${NAME_OF(FACES,a.face)} · 키 ${HEIGHTS[a.height]} · 어깨 ${SHOULDERS[a.shoulder]} · ${BODIES[a.body]}`;}
+const avCard=(extra)=>`<div class="card avcard"><div class="fit">${avatarSVG(st)}</div><p class="cap">${esc(avatarSummary())}</p>${extra||''}</div>`;
+
+/* ================= 화면: 시작 ================= */
+const STEPS=[['avatar','나의 아바타'],['drape','색 대어 보기'],['goal','연출 목표'],['coordi','코디하기'],['compare','비교하기'],['card','코디 카드']];
+function renderSteps(){
+ const el=$('#steps');
+ if(screen==='start'){el.innerHTML='';return;}
+ const idx=STEPS.findIndex(s=>s[0]===screen);
+ el.innerHTML=STEPS.map((s,i)=>`<button type="button" class="step ${s[0]===screen?'on':i<idx?'done':''}" data-act="go" data-v="${s[0]}">${i+1}. ${s[1]}</button>`).join('');
+}
+function rStart(){
+ $('#s-start').innerHTML=`<div class="hero card" style="margin-top:10px"><div>
+  <p style="color:var(--violet);font-weight:700">중학교 가정 · [9기가01-04] 의복 디자인 요소와 착시 효과</p>
+  <h1>나를 살리는<br>코디 랩</h1>
+  <p style="margin-top:14px"><span class="msg">몸을 고치는 게 아니라,<br>옷의 효과를 알고 나를 표현하는 것</span></p>
+  <div class="steps4">
+   <div class="s4"><b>1단계</b>나의 아바타 만들기<br><span>얼굴·피부·체형을 골라요</span></div>
+   <div class="s4"><b>2단계</b>색 대어 보기<br><span>색이 주는 인상을 관찰해요</span></div>
+   <div class="s4"><b>3단계</b>연출 목표 + 코디<br><span>목표를 고르고 입혀 봐요</span></div>
+   <div class="s4"><b>4단계</b>비교하고 카드 만들기<br><span>설명을 쓰고 저장해요</span></div>
+  </div>
+  <button type="button" class="btn" style="font-size:20px;min-height:58px" data-act="go" data-v="avatar">시작하기 →</button>
+  <p class="cap" style="margin-top:10px">사진이나 카메라는 쓰지 않아요. 모든 옷은 누구나 입을 수 있어요.</p>
+ </div><div class="heroav"><div class="fit sm">${avatarSVG(initial())}</div></div></div>`;
+}
+
+/* ================= 화면: 아바타 ================= */
+function rAvatar(){
+ const a=st.avatar,t=tabs.avatar;let p='';
+ if(t==='face'){
+  p=group('얼굴형',FACES.map(f=>chip('avatar.face',f.id,f.name,a.face===f.id)).join(''))
+   +group('머리 모양',HAIRS.map(h=>chip('avatar.hair',h.id,h.name,a.hair===h.id,1)).join(''))
+   +`<div class="grp"><h4>머리 색</h4><div class="chips">${HAIR_COLORS.map((c,i)=>`<button type="button" class="sw ${a.hairColor===i?'on':''}" style="background:${c.hex}" data-act="set" data-k="avatar.hairColor" data-v="${i}" data-num="1" aria-label="${c.name}" title="${c.name}"></button>`).join('')}</div></div>`;
+ }else if(t==='skin'){
+  p=`<div class="grp"><h4>피부톤 (밝은 톤 ~ 어두운 톤)</h4><div class="chips">${SKIN[a.undertone].map((c,i)=>`<button type="button" class="sw ${a.skin===i?'on':''}" style="background:${c}" data-act="set" data-k="avatar.skin" data-v="${i}" data-num="1" aria-label="${SKIN_NAMES[i]}" title="${SKIN_NAMES[i]}"></button>`).join('')}</div><div class="sw-cap"><span>밝은 톤</span><span>어두운 톤</span></div></div>`
+   +group('피부의 기운',chip('avatar.undertone','yellow','노란 기',a.undertone==='yellow')+chip('avatar.undertone','red','붉은 기',a.undertone==='red'));
+ }else{
+  p=group('키',Object.entries(HEIGHTS).map(([k,v])=>chip('avatar.height',k,v,a.height===k)).join(''))
+   +group('어깨',Object.entries(SHOULDERS).map(([k,v])=>chip('avatar.shoulder',k,v,a.shoulder===k)).join(''))
+   +group('체형 실루엣',Object.entries(BODIES).map(([k,v])=>chip('avatar.body',k,v,a.body===k)).join(''));
+ }
+ $('#s-avatar').innerHTML=`<h2 style="font-size:30px;margin:6px 0 12px">1. 나의 아바타 만들기</h2>
+ <div class="stage">${avCard()}<div class="col"><div class="card">
+  <div class="note" style="margin-bottom:14px">정답은 없어요. 나와 비슷하게, 또는 원하는 캐릭터로 만들어도 좋아요.</div>
+  ${tabBar('avatar',[['face','얼굴·머리'],['skin','피부톤'],['body','키·몸']])}${p}</div>${nav('start','drape','색 대어 보기로')}</div></div>`;
+}
+
+/* ================= 화면: 색 대어 보기 ================= */
+function curDrapeId(){return drape.cmp?drape[drape.side]:drape.a;}
+function rDrape(){
+ const A=DC(drape.a),B=DC(drape.b),cur=DC(curDrapeId());
+ const cs=(g)=>DRAPE_COLORS.filter(c=>c.g===g).map(c=>{
+  const isA=drape.a===c.id,isB=drape.cmp&&drape.b===c.id;
+  return `<button type="button" class="cs ${isA?'on':''} ${isB?'onb':''}" data-act="drape" data-v="${c.id}" aria-label="${c.n}"><i style="background:${c.h}"></i>${c.n}${isA&&drape.cmp?'<em>왼쪽</em>':''}${isB?'<em class="b">오른쪽</em>':''}</button>`;}).join('');
+ const saved=st.myColors.map(id=>`<span class="pill" style="display:inline-flex;align-items:center;gap:6px"><i style="width:16px;height:16px;border-radius:50%;background:${DC(id).h};box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)"></i>${DC(id).n}<button type="button" data-act="rmColor" data-v="${id}" aria-label="${DC(id).n} 빼기" style="border:0;background:none;cursor:pointer;font-size:16px">×</button></span>`).join('');
+ const stage=drape.cmp
+  ?`<div class="drow two"><div><div class="dfit">${drapeSVG(st.avatar,A.h)}</div><p class="imp">${A.n}</p><p class="cap" style="text-align:center">${A.t}</p></div><div><div class="dfit">${drapeSVG(st.avatar,B.h)}</div><p class="imp">${B.n}</p><p class="cap" style="text-align:center">${B.t}</p></div></div>`
+  :`<div class="dfit" style="max-width:420px;margin:0 auto">${drapeSVG(st.avatar,A.h)}</div><p class="imp">${A.n}</p><p style="text-align:center">${A.t}</p>`;
+ $('#s-drape').innerHTML=`<h2 style="font-size:30px;margin:6px 0 12px">2. 색 대어 보기</h2>
+ <div class="stage" style="grid-template-columns:minmax(280px,1.1fr) 1fr"><div class="col"><div class="card">${stage}
+  <div class="row2" style="justify-content:center;margin-top:14px">
+   <button type="button" class="btn violet sm" data-act="cmpToggle">${drape.cmp?'한 색만 보기':'비교하기'}</button>
+   ${drape.cmp?`<button type="button" class="chip ${drape.side==='a'?'on':''}" data-act="side" data-v="a">◀ 왼쪽 천 고르기</button><button type="button" class="chip ${drape.side==='b'?'on':''}" data-act="side" data-v="b">오른쪽 천 고르기 ▶</button>`:''}
+   <button type="button" class="btn sm" data-act="saveColor">${st.myColors.includes(curDrapeId())?'★ 나의 색에서 빼기':'★ '+cur.n+' 나의 색에 담기'}</button>
+  </div></div>
+  <div class="card"><h4>★ 나의 색 (3개까지)</h4>${saved||'<p class="cap">내 얼굴이 더 환해 보이는 색을 담아 보세요. 코디 단계 색상표 맨 앞에 나와요.</p>'}</div></div>
+ <div class="col"><div class="card">
+  <div class="note" style="margin-bottom:12px">정답을 찾는 시간이 아니에요. 색을 대어 보며 <b>눈, 피부, 분위기</b>가 어떻게 달라 보이는지 스스로 살펴보세요. 어떤 인상이 느껴지나요?</div>
+  <h4>따뜻한 색</h4><div class="cgrid">${cs('w')}</div><h4 style="margin-top:14px">차가운 색</h4><div class="cgrid">${cs('c')}</div><h4 style="margin-top:14px">무채색</h4><div class="cgrid">${cs('n')}</div></div>
+ ${nav('avatar','goal','연출 목표로')}</div></div>`;
+}
+
+/* ================= 화면: 연출 목표 ================= */
+function rGoal(){
+ $('#s-goal').innerHTML=`<h2 style="font-size:30px;margin:6px 0 12px">3. 연출 목표 고르기</h2><div class="card">
+ <p style="margin-bottom:14px">내가 <b>되고 싶은 모습</b>을 최대 2개까지 골라요. 앱은 고른 목표에 맞는 옷의 효과를 안내해 줘요. (고른 목표: ${st.goals.length}/2)</p>
+ <div class="goals">${GOALS.map(g=>`<button type="button" class="goal ${st.goals.includes(g.id)?'on':''}" data-act="goal" data-v="${g.id}" aria-pressed="${st.goals.includes(g.id)}"><b>${st.goals.includes(g.id)?'✓ ':''}${g.name}</b><small>${g.tip}</small></button>`).join('')}</div></div>${nav('drape','coordi','코디하기로')}`;
+}
+
+/* ================= 화면: 코디하기 ================= */
+function colorGroup(label,key,cur){
+ const mine=st.myColors.map(id=>({n:DC(id).n,h:DC(id).h}));
+ const set=new Set(mine.map(c=>c.h));
+ let h=`<div class="grp"><h4>${label}</h4>`;
+ if(mine.length)h+=`<p class="cap" style="margin:-4px 0 6px">★ 나의 색</p><div class="chips" style="margin-bottom:10px">${swatchRow('outfit.'+key,mine,cur,set)}</div><p class="cap" style="margin:0 0 6px">기본 색</p>`;
+ h+=`<div class="chips">${swatchRow('outfit.'+key,BASIC,cur,null)}</div></div>`;
+ return h;
+}
+function coordiPanel(){
+ const o=st.outfit,t=tabs.coordi;let p='';
+ if(t==='top'){
+  const ap=TOPS.find(x=>x.id===o.top).neck;
+  p=group('상의',TOPS.map(x=>chip('outfit.top',x.id,x.name,o.top===x.id)).join(''))
+   +group('네크라인'+(ap?'':' (이 상의는 정해진 목선이 있어요)'),NECKS.map(n=>chip('outfit.neck',n.id,n.name,ap&&o.neck===n.id,0,!ap)).join(''))
+   +colorGroup('상의 색','topColor',o.topColor)
+   +(o.top==='hstripe'||o.top==='vstripe'?'<p class="cap">줄무늬는 고른 색이 바탕이 되고, 줄무늬 색은 어울리게 자동으로 정해져요.</p>':'');
+ }else if(t==='bottom'){
+  p=group('하의',BOTTOMS.map(x=>chip('outfit.bottom',x.id,x.name,o.bottom===x.id)).join(''))+colorGroup('하의 색','bottomColor',o.bottomColor);
+ }else if(t==='outer'){
+  p=group('겉옷',OUTERS.map(x=>chip('outfit.outer',x.id,x.name,o.outer===x.id)).join(''))+(o.outer!=='none'?colorGroup('겉옷 색','outerColor',o.outerColor):'<p class="cap">겉옷을 고르면 색도 바꿀 수 있어요.</p>');
+ }else{
+  p=group('신발',SHOES.map(x=>chip('outfit.shoes',x.id,x.name,o.shoes===x.id)).join(''))+colorGroup('신발 색','shoesColor',o.shoesColor);
+ }
+ return tabBar('coordi',[['top','상의'],['bottom','하의'],['outer','겉옷'],['shoes','신발']])+p;
+}
+function rCoordi(){
+ const g=st.goals.length?`<div class="cap" style="margin-top:6px">🎯 ${st.goals.map(i=>GOAL_BY[i].name).join(' · ')}</div>`:'';
+ $('#s-coordi').innerHTML=`<h2 style="font-size:30px;margin:6px 0 12px">4. 코디하기</h2>
+ <div class="stage">${avCard(g)}<div class="col"><div class="card">${coordiPanel()}</div>
+ <div class="card"><h3 style="font-size:24px;margin-bottom:8px">효과 미터</h3>${metersHTML(st)}</div>
+ <div class="card"><h4>이 코디를 저장해서 비교해 볼까요?</h4><div class="row2"><button type="button" class="btn violet sm" data-act="save" data-v="A">A안 저장${st.saved.A?' ✓':''}</button><button type="button" class="btn violet sm" data-act="save" data-v="B">B안 저장${st.saved.B?' ✓':''}</button></div></div>
+ ${nav('goal','compare','비교하기로')}</div></div>`;
+}
+
+/* ================= 화면: 비교하기 ================= */
+function rCompare(){
+ const A=st.saved.A,B=st.saved.B;
+ const mk=(label,snap)=>`<div class="card avcard"><h3 style="font-size:26px;color:var(--${label==='A안'?'pink':'violet'})">${label}</h3>${snap?`<div class="fit sm">${avatarSVG({avatar:st.avatar,outfit:snap})}</div><div class="row2" style="justify-content:center;margin-top:8px"><button type="button" class="btn ghost sm" data-act="load" data-v="${label[0]}">이 코디 불러오기</button></div>`:`<div class="fit sm" style="align-items:center"><p class="cap">아직 저장하지 않았어요.<br>코디하기에서 현재 코디를 저장해 보세요.</p></div>`}</div>`;
+ let table='';
+ if(A&&B){
+  const ma=meters({avatar:st.avatar,outfit:A,goals:st.goals}).M,mb=meters({avatar:st.avatar,outfit:B,goals:st.goals}).M;
+  const tgm=new Set();st.goals.forEach(id=>wants(id).forEach(w=>tgm.add(w[0]==='legs'?'tall':w[0])));
+  table=METERS.map(([k,l])=>`<div class="cmprow"><span>${tgm.has(k)?'🎯 ':''}${l}</span><div><div class="bar"><i style="width:${ma[k]}%"></i></div><div class="bar b"><i style="width:${mb[k]}%"></i></div><small>A ${ma[k]} · B ${mb[k]}</small></div></div>`).join('');
+  const lines=st.goals.map(id=>{const sa=goalScore(id,ma,st.avatar.body),sb=goalScore(id,mb,st.avatar.body);
+   const r=sa>sb+2?'A안이 더 커요':sb>sa+2?'B안이 더 커요':'두 안이 비슷해요';return `<li>'${esc(GOAL_BY[id].name)}' 효과는 <b>${r}</b>.</li>`;}).join('');
+  table=`<div class="card"><h3 style="font-size:24px;margin-bottom:8px">미터 비교 <span class="cap">(분홍 = A안, 보라 = B안)</span></h3>${table}${lines?`<div class="note green"><b>고른 목표로 비교해 보면</b><ul style="margin:6px 0 0;padding-left:20px">${lines}</ul></div>`:'<div class="note">연출 목표를 고르면 목표별로 어느 안이 더 가까운지도 알려 드려요.</div>'}</div>`;
+ }else table=`<div class="note">A안과 B안을 모두 저장하면 두 코디의 미터를 나란히 비교할 수 있어요.</div>`;
+ $('#s-compare').innerHTML=`<h2 style="font-size:30px;margin:6px 0 12px">5. 코디 비교하기</h2>
+ <div class="card" style="margin-bottom:16px"><div class="row2"><button type="button" class="btn sm" data-act="save" data-v="A">지금 코디를 A안으로 저장</button><button type="button" class="btn violet sm" data-act="save" data-v="B">지금 코디를 B안으로 저장</button><button type="button" class="btn ghost sm" data-act="go" data-v="coordi">← 코디 더 바꾸러 가기</button></div></div>
+ <div class="cmpgrid">${mk('A안',A)}${mk('B안',B)}</div><div style="margin-top:16px">${table}</div>${nav('coordi','card','코디 카드로')}`;
+}
+
+/* ================= 화면: 코디 카드 ================= */
+const ELEMS=['선','색','무늬','재질','실루엣'];
+function checkText(t){const len=[...t.replace(/\s/g,'')].length;const found=ELEMS.filter(w=>t.includes(w));return {len,found,okLen:len>=30,okEl:found.length>=2};}
+function checklistHTML(){
+ const c=checkText(st.desc);
+ return `<ul class="check"><li class="${c.okLen?'ok':''}"><span class="mk">${c.okLen?'✓':''}</span><span>30자 이상 썼어요 <b>(${c.len}자)</b></span></li>
+ <li class="${c.okEl?'ok':''}"><span class="mk">${c.okEl?'✓':''}</span><span>디자인 요소 낱말(선·색·무늬·재질·실루엣)을 2개 이상 썼어요 <b>(${c.found.length?c.found.join(', '):'아직 없어요'})</b></span></li></ul>
+ <p class="cap" style="margin-top:6px">${c.okLen&&c.okEl?'멋져요! 목표와 디자인 요소가 잘 연결된 설명이에요.':'목표 → 디자인 요소 → 효과 순서로 써 보면 더 좋아져요.'}</p>`;
+}
+function cardHTML(){
+ const {M}=meters(st);const ge=goalEval(st,M);const tg={};ge.forEach(r=>r.ms.forEach(m=>{tg[m]=tg[m]?tg[m]&&r.ok:r.ok;}));
+ const o=st.outfit;
+ const mini=METERS.map(([k,l,b])=>{const cls=k in tg?(tg[k]?'ok':'tg'):'';return `<div class="mini ${cls}"><span>${l}</span><div class="bar"><i style="width:${M[k]}%"></i><u style="left:${b}%"></u></div><b>${Math.round(M[k]-b)>0?'+':''}${Math.round(M[k]-b)}</b></div>`;}).join('');
+ return `<div class="codi-card" id="cardBox"><div class="cc-head"><small>나를 살리는 코디 랩</small><h3>${esc(st.name||'나의 코디')}</h3></div>
+ <div class="cc-body"><div class="fit">${avatarSVG(st)}</div><div>
+  <h4>연출 목표</h4><div>${st.goals.length?st.goals.map(i=>`<span class="pill">${GOAL_BY[i].name}</span>`).join(''):'<span class="cap">고른 목표가 없어요</span>'}</div>
+  <h4 style="margin-top:8px">효과 미터</h4>${mini}
+  <h4 style="margin-top:8px">코디 구성</h4><p style="font-size:13px">상의 ${NAME_OF(TOPS,o.top)} · 하의 ${NAME_OF(BOTTOMS,o.bottom)}<br>겉옷 ${NAME_OF(OUTERS,o.outer)} · 신발 ${NAME_OF(SHOES,o.shoes)}</p></div></div>
+ <div class="cc-desc"><h4>나의 코디 설명</h4>${esc(st.desc)||'<span class="cap">설명을 쓰면 여기에 나와요.</span>'}</div></div>`;
+}
+function rCard(){
+ $('#s-card').innerHTML=`<h2 style="font-size:30px;margin:6px 0 12px">6. 나의 코디 설명과 카드</h2>
+ <div class="stage" style="grid-template-columns:minmax(280px,1fr) minmax(300px,1.1fr)"><div class="col"><div class="card">
+  <h4>코디 이름</h4><input type="text" id="nameIn" maxlength="14" placeholder="예) 햇살 가득한 하루" value="${esc(st.name)}" style="margin-bottom:14px">
+  <h4>어떤 목표를 위해 어떤 디자인 요소를 썼나요?</h4>
+  <textarea id="descIn" rows="6" maxlength="300" placeholder="예) 키가 커 보이게 하려고 세로 줄무늬(선)와 위아래 비슷한 색을 골랐어요. 이어지는 선이 몸을 길어 보이게 해요.">${esc(st.desc)}</textarea>
+  <div id="checkBox">${checklistHTML()}</div></div>
+  <div class="card"><div class="row2"><button type="button" class="btn" data-act="png">이미지로 저장</button><button type="button" class="btn ghost" data-act="reset">처음부터 다시</button></div></div>
+  ${nav('compare',null)}</div>
+ <div class="col"><div id="cardWrap">${cardHTML()}</div></div></div>`;
+ $('#nameIn').addEventListener('input',e=>{st.name=e.target.value;$('#cardWrap').innerHTML=cardHTML();});
+ $('#descIn').addEventListener('input',e=>{st.desc=e.target.value;$('#checkBox').innerHTML=checklistHTML();$('#cardWrap').innerHTML=cardHTML();});
+}
+
+/* ================= PNG 저장 ================= */
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function wrapText(g,text,x,y,maxW,lh,maxLines){
+ const lines=[];let cur='';
+ for(const ch of text){if(ch==='\n'){lines.push(cur);cur='';continue;}if(g.measureText(cur+ch).width>maxW){lines.push(cur);cur=ch;}else cur+=ch;}
+ if(cur)lines.push(cur);
+ const shown=lines.slice(0,maxLines);
+ if(lines.length>maxLines)shown[maxLines-1]=shown[maxLines-1].replace(/.$/,'')+'…';
+ shown.forEach((l,i)=>g.fillText(l,x,y+i*lh));
+}
+function svgToImg(svg){
+ return new Promise((res,rej)=>{
+  const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});const url=URL.createObjectURL(blob);
+  const img=new Image();img.onload=()=>{res(img);setTimeout(()=>URL.revokeObjectURL(url),2000);};img.onerror=rej;img.src=url;
+ });
+}
+async function savePNG(){
+ try{await Promise.all([document.fonts.load('700 28px "Noto Sans KR"'),document.fonts.load('400 24px "Noto Sans KR"'),document.fonts.load('40px "Jua"')]);}catch(e){}
+ const W=1080,H=1500;const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+ const grd=g.createLinearGradient(0,0,W,H);grd.addColorStop(0,'#ffe9ef');grd.addColorStop(1,'#fff6e8');g.fillStyle=grd;g.fillRect(0,0,W,H);
+ g.fillStyle='#fff';rr(g,30,30,1020,1440,44);g.fill();
+ g.fillStyle='#ff6b8b';g.font='700 26px "Noto Sans KR",sans-serif';g.textBaseline='alphabetic';g.fillText('나를 살리는 코디 랩',70,95);
+ g.fillStyle='#2d2733';g.font='56px "Jua","Noto Sans KR",sans-serif';g.fillText(st.name||'나의 코디',70,165);
+ g.fillStyle='#fff1f5';rr(g,60,200,420,810,30);g.fill();
+ const img=await svgToImg(avatarSVG(st,'px',[300,580]));
+ g.drawImage(img,70,214,406,785);
+ const {M}=meters(st);const ge=goalEval(st,M);const tg={};ge.forEach(r=>r.ms.forEach(m=>{tg[m]=(m in tg)?tg[m]&&r.ok:r.ok;}));
+ let y=240;g.fillStyle='#7b61ff';g.font='700 26px "Noto Sans KR",sans-serif';g.fillText('연출 목표',520,y);y+=14;
+ g.font='700 24px "Noto Sans KR",sans-serif';
+ if(!st.goals.length){g.fillStyle='#766c7d';g.font='400 22px "Noto Sans KR",sans-serif';g.fillText('고른 목표가 없어요',520,y+34);y+=56;}
+ st.goals.forEach(id=>{const t=GOAL_BY[id].name;const w=g.measureText(t).width+40;g.fillStyle='#ece8ff';rr(g,520,y+8,w,44,22);g.fill();g.fillStyle='#7b61ff';g.fillText(t,540,y+39);y+=58;});
+ y=Math.max(y+20,400);g.fillStyle='#7b61ff';g.font='700 26px "Noto Sans KR",sans-serif';g.fillText('효과 미터',520,y);y+=22;
+ METERS.forEach(([k,l,b])=>{
+  g.fillStyle='#2d2733';g.font='400 22px "Noto Sans KR",sans-serif';g.fillText(l,520,y+22);
+  const d=Math.round(M[k]-b);g.textAlign='right';g.font='700 22px "Noto Sans KR",sans-serif';g.fillText((d>0?'+':d<0?'−':'')+Math.abs(d),1010,y+22);g.textAlign='left';
+  g.fillStyle='#f1e9ee';rr(g,520,y+30,490,14,7);g.fill();
+  g.fillStyle=(k in tg)?(tg[k]?'#1fa36a':'#7b61ff'):'#ff6b8b';if(M[k]>0){rr(g,520,y+30,Math.max(14,490*M[k]/100),14,7);g.fill();}
+  g.fillStyle='rgba(0,0,0,.3)';g.fillRect(520+490*b/100-1,y+28,2,18);
+  y+=64;
+ });
+ const o=st.outfit;g.fillStyle='#7b61ff';g.font='700 26px "Noto Sans KR",sans-serif';g.fillText('코디 구성',520,y+14);
+ g.fillStyle='#2d2733';g.font='400 22px "Noto Sans KR",sans-serif';
+ g.fillText(`상의 ${NAME_OF(TOPS,o.top)} · 하의 ${NAME_OF(BOTTOMS,o.bottom)}`,520,y+52);
+ g.fillText(`겉옷 ${NAME_OF(OUTERS,o.outer)} · 신발 ${NAME_OF(SHOES,o.shoes)}`,520,y+86);
+ g.fillStyle='#fff8f2';rr(g,60,1040,960,390,28);g.fill();
+ g.fillStyle='#ff6b8b';g.font='700 26px "Noto Sans KR",sans-serif';g.fillText('나의 코디 설명',90,1090);
+ g.fillStyle='#2d2733';g.font='400 28px "Noto Sans KR",sans-serif';
+ wrapText(g,st.desc||'(설명을 쓰면 이곳에 나와요)',90,1142,900,44,7);
+ c.toBlob(b=>{if(!b){toast('이미지를 만들지 못했어요. 다시 시도해 주세요.');return;}
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=(st.name||'나의_코디')+'_코디카드.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000);toast('코디 카드를 저장했어요!');},'image/png');
+}
+
+/* ================= 렌더/이벤트 ================= */
+const RENDERERS={start:rStart,avatar:rAvatar,drape:rDrape,goal:rGoal,coordi:rCoordi,compare:rCompare,card:rCard};
+function render(){
+ document.querySelectorAll('.screen').forEach(e=>{e.hidden=e.id!=='s-'+screen;});
+ renderSteps();RENDERERS[screen]();
+}
+function go(s){screen=s;render();window.scrollTo(0,0);}
+function setPath(k,v){const p=k.split('.');let o=st;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=v;}
+function toggleGoal(id){
+ const i=st.goals.indexOf(id);
+ if(i>=0)st.goals.splice(i,1);
+ else{
+  if(st.goals.length>=2){toast('목표는 2개까지 고를 수 있어요. 하나를 눌러 해제하면 다른 목표를 고를 수 있어요.');return;}
+  const cf=CONFLICT[id];if(cf&&st.goals.includes(cf)){toast('두 목표는 서로 반대 방향이라 함께 고를 수 없어요. 하나만 골라 볼까요?');return;}
+  st.goals.push(id);
+ }
+ render();
+}
+function pickDrape(id){
+ if(drape.cmp)drape[drape.side]=id;else drape.a=id;
+ render();
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-act]');if(!b||b.disabled)return;
+ const act=b.dataset.act,v=b.dataset.v;
+ switch(act){
+  case 'go':go(v);break;
+  case 'set':setPath(b.dataset.k,b.dataset.num!==undefined?Number(v):v);render();break;
+  case 'tab':tabs[b.dataset.k]=v;render();break;
+  case 'goal':toggleGoal(v);break;
+  case 'drape':pickDrape(v);break;
+  case 'cmpToggle':drape.cmp=!drape.cmp;if(drape.cmp&&drape.a===drape.b)drape.b=drape.a==='sky'?'coral':'sky';drape.side='a';render();break;
+  case 'side':drape.side=v;render();break;
+  case 'saveColor':{
+   const id=curDrapeId(),i=st.myColors.indexOf(id);
+   if(i>=0){st.myColors.splice(i,1);}
+   else if(st.myColors.length>=3){toast('나의 색은 3개까지예요. 하나를 빼고 다른 색을 담아 보세요.');return;}
+   else{st.myColors.push(id);toast(DC(id).n+' 색을 나의 색에 담았어요!');}
+   render();break;}
+  case 'rmColor':st.myColors=st.myColors.filter(x=>x!==v);render();break;
+  case 'save':st.saved[v]={...st.outfit};toast(v+'안을 저장했어요!');render();break;
+  case 'load':if(st.saved[v]){st.outfit={...st.saved[v]};toast(v+'안을 불러왔어요. 코디하기에서 이어서 바꿀 수 있어요.');go('coordi');}break;
+  case 'png':savePNG();break;
+  case 'reset':if(confirm('모든 선택이 지워지고 처음 화면으로 돌아가요. 괜찮을까요?')){st=initial();tabs={avatar:'face',coordi:'top'};drape={a:'coral',b:'sky',cmp:false,side:'a'};go('start');}break;
+ }
+});
+render();
+</script>
+</body>
+</html>
